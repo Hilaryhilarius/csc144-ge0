@@ -7,7 +7,7 @@ import java.util.Random;
 public class SearchAndSort {
 
     private static Random rng = new Random();
-    private static final int SIZE_THRESHOLD = 12;
+    private static final int SIZE_THRESHOLD = 16;
 
     public static List<Integer> makeList(int size) {
         List<Integer> result = new ArrayList<>();
@@ -89,6 +89,30 @@ public class SearchAndSort {
 
     // TO-DO: Define a method that sorts a list
     // of integers using the selection sort algorithm.
+    
+    public static void swap( List<Integer> values, int i, int j ) {
+        int temp = values.get(i);
+        values.set(i, values.get(j));
+        values.set(j, temp);
+    } // swap( List<Integer>, int, int )
+    
+    public static int findPosMin( List<Integer> values, int start ) {
+        int bestGuessSoFar = start;
+        for( int i = start + 1; i < values.size(); i++ ) {
+            if( values.get(i) < values.get(bestGuessSoFar)) {
+                bestGuessSoFar = i;
+            } // if
+        } // for
+        return bestGuessSoFar;
+    } // findPosMin( List<Integer>, int )
+    
+    public static void selectionSort( List<Integer> values ) {
+        for( int i = 0; i < values.size(); i++ ) {
+            int j = findPosMin( values, i );
+            swap( values, i, j );
+        } // for
+    } // selectionSort( List<Integer> )
+    
     // TO-DO: Define a method that sorts a list
     // of integers using the insertion sort algorithm.
     // TO-DO: Define a method that sorts a list
@@ -98,5 +122,11 @@ public class SearchAndSort {
 
         // TO-DO: Add code that tests the searching and sorting
         // methods.
+        
+        List<Integer> data = makeList( 12 );
+        printList( data );
+        System.out.println( " **** ");
+        selectionSort( data );
+        printList( data );
     } // main( String [] )
 } // SearchAndSort
