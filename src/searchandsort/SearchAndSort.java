@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// You may borrow from this code freely.
+// Your assignment is to write comments
+// with Javadoc that explain this code.
 public class SearchAndSort {
 
     private static Random rng = new Random();
@@ -89,44 +92,130 @@ public class SearchAndSort {
 
     // TO-DO: Define a method that sorts a list
     // of integers using the selection sort algorithm.
-    
-    public static void swap( List<Integer> values, int i, int j ) {
+    public static void swap(List<Integer> values, int i, int j) {
         int temp = values.get(i);
         values.set(i, values.get(j));
         values.set(j, temp);
     } // swap( List<Integer>, int, int )
-    
-    public static int findPosMin( List<Integer> values, int start ) {
+
+    public static int findPosMin(List<Integer> values, int start) {
         int bestGuessSoFar = start;
-        for( int i = start + 1; i < values.size(); i++ ) {
-            if( values.get(i) < values.get(bestGuessSoFar)) {
+        for (int i = start + 1; i < values.size(); i++) {
+            if (values.get(i) < values.get(bestGuessSoFar)) {
                 bestGuessSoFar = i;
             } // if
         } // for
         return bestGuessSoFar;
     } // findPosMin( List<Integer>, int )
-    
-    public static void selectionSort( List<Integer> values ) {
-        for( int i = 0; i < values.size(); i++ ) {
-            int j = findPosMin( values, i );
-            swap( values, i, j );
+
+    public static void selectionSort(List<Integer> values) {
+        for (int i = 0; i < values.size(); i++) {
+            int j = findPosMin(values, i);
+            swap(values, i, j);
         } // for
     } // selectionSort( List<Integer> )
-    
+
     // TO-DO: Define a method that sorts a list
     // of integers using the insertion sort algorithm.
+    public static void insert(List<Integer> values, int next) {
+
+        int i = next;
+        while (i > 0 && values.get(i) < values.get(i - 1)) {
+            swap(values, i, i - 1);
+            i = i - 1;
+        } // while
+
+    } // insert( List<Integer>, int )
+
+    public static void insertionSort(List<Integer> values) {
+        for (int i = 1; i < values.size(); i++) {
+            insert(values, i);
+        } // for
+    } // insertionSort( List<Integer> )
+
     // TO-DO: Define a method that sorts a list
     // of integers using the merge sort algorithm.
+    public static void merge(List<Integer> values, int prefixStart,
+            int suffixStart, int suffixEnd) {
+        List<Integer> temp = new ArrayList<>();
+
+        int i = prefixStart;
+        int j = suffixStart;
+
+        while (i < suffixStart && j < suffixEnd) {
+            if (values.get(i) < values.get(j)) {
+                temp.add(values.get(i));
+                i++;
+            } // if
+            else {
+                temp.add(values.get(j));
+                j++;
+            } // else
+        } // while
+
+        while (i < suffixStart) {
+            temp.add(values.get(i));
+            i++;
+        } // while
+
+        while (j < suffixEnd) {
+            temp.add(values.get(j));
+            j++;
+        } // while
+
+        i = prefixStart;
+        for (int index = 0; index < temp.size(); index++) {
+            values.set(i, temp.get(index));
+            i++;
+        } // for
+    } // merge( List<Integer>, int, int )
+
+    public static void mergeSort(List<Integer> values) {
+        for (int stepSize = 2; stepSize < values.size(); stepSize *= 2) {
+            for (int i = 0; i < values.size(); i += stepSize) {
+                int prefixStart = i;
+                int suffixStart = i + stepSize / 2;
+                int suffixEnd = Math.min(values.size(), i + stepSize);
+                merge(values, prefixStart, suffixStart, suffixEnd);
+            } // for
+            if (stepSize > values.size() / 2) {
+                int prefixStart = 0;
+                int suffixStart = stepSize;
+                int suffixEnd = values.size();
+                merge(values, prefixStart, suffixStart, suffixEnd);
+            } // if
+            //printList(values);
+        } // for
+    } // mergeSort( List<Integer> )
+
     public static void main(String[] args) {
         System.out.println("Searching and sorting algorithms");
 
         // TO-DO: Add code that tests the searching and sorting
         // methods.
-        
-        List<Integer> data = makeList( 12 );
-        printList( data );
-        System.out.println( " **** ");
-        selectionSort( data );
-        printList( data );
+        System.out.println("Selection sort.");
+        List<Integer> data = makeList(12);
+        printList(data);
+        System.out.println(" **** ");
+        selectionSort(data);
+        printList(data);
+
+        System.out.println(" **** ");
+
+        System.out.println("Insertion sort.");
+        data = makeList(12);
+        printList(data);
+        System.out.println(" **** ");
+        insertionSort(data);
+        printList(data);
+
+        System.out.println(" **** ");
+
+        System.out.println("Merge sort.");
+        data = makeList(12);
+        printList(data);
+        System.out.println(" **** ");
+        mergeSort(data);
+        printList(data);
     } // main( String [] )
 } // SearchAndSort
